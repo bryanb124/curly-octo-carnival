@@ -321,6 +321,81 @@ document.addEventListener('keyup', (e) => {
   keys[e.key] = false;
 });
 
+// ---- Touch Input ----
+const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+
+function setupTouchButton(btnId, keyName) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+
+  btn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    keys[keyName] = true;
+    btn.classList.add('active');
+  }, { passive: false });
+
+  btn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    keys[keyName] = false;
+    btn.classList.remove('active');
+  }, { passive: false });
+
+  btn.addEventListener('touchcancel', (e) => {
+    keys[keyName] = false;
+    btn.classList.remove('active');
+  });
+
+  // Prevent mousedown fallback from interfering
+  btn.addEventListener('mousedown', (e) => e.preventDefault());
+}
+
+setupTouchButton('btn-left', 'ArrowLeft');
+setupTouchButton('btn-right', 'ArrowRight');
+setupTouchButton('btn-fire', ' ');
+
+// Tap on overlays to start / restart
+document.getElementById('overlay').addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  if (state === GameState.TITLE) {
+    initAudio();
+    startGame();
+  }
+}, { passive: false });
+
+document.getElementById('overlay').addEventListener('click', () => {
+  if (state === GameState.TITLE) {
+    initAudio();
+    startGame();
+  }
+});
+
+document.getElementById('game-over-overlay').addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  if (state === GameState.GAME_OVER) {
+    resetToTitle();
+  }
+}, { passive: false });
+
+document.getElementById('game-over-overlay').addEventListener('click', () => {
+  if (state === GameState.GAME_OVER) {
+    resetToTitle();
+  }
+});
+
+// Prevent iOS scroll / zoom / bounce on the game area
+document.addEventListener('touchmove', (e) => { e.preventDefault(); }, { passive: false });
+
+// Tap canvas to pause/resume (touch devices)
+canvas.addEventListener('touchstart', (e) => {
+  if (state === GameState.PLAYING) {
+    state = GameState.PAUSED;
+    e.preventDefault();
+  } else if (state === GameState.PAUSED) {
+    state = GameState.PLAYING;
+    e.preventDefault();
+  }
+}, { passive: false });
+
 // ---- Init functions ----
 function initStars() {
   stars = [];
@@ -868,7 +943,7 @@ function draw() {
     ctx.textAlign = 'center';
     ctx.fillText('PAUSED', W / 2, H / 2);
     ctx.font = '10px "Press Start 2P", monospace';
-    ctx.fillText('PRESS P TO RESUME', W / 2, H / 2 + 30);
+    ctx.fillText(isTouchDevice ? 'TAP HERE TO RESUME' : 'PRESS P TO RESUME', W / 2, H / 2 + 30);
     ctx.textAlign = 'left';
   }
 }

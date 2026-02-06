@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <title>Space Invaders - 8-Bit</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -18,16 +20,32 @@
       <div id="title">SPACE INVADERS</div>
       <div id="subtitle">8-BIT EDITION</div>
       <div id="instructions">
-        <p>&larr; &rarr; ARROW KEYS TO MOVE</p>
-        <p>SPACE TO FIRE</p>
-        <p>P TO PAUSE</p>
+        <p class="desktop-only">&larr; &rarr; ARROW KEYS TO MOVE</p>
+        <p class="desktop-only">SPACE TO FIRE</p>
+        <p class="desktop-only">P TO PAUSE</p>
+        <p class="mobile-only">USE ON-SCREEN CONTROLS</p>
       </div>
-      <div id="start-msg" class="blink">PRESS SPACE TO START</div>
+      <div id="start-msg" class="blink">
+        <span class="desktop-only">PRESS SPACE TO START</span>
+        <span class="mobile-only">TAP HERE TO START</span>
+      </div>
     </div>
     <div id="game-over-overlay" class="hidden">
       <div id="game-over-text">GAME OVER</div>
       <div id="final-score">SCORE: 0000</div>
-      <div id="restart-msg" class="blink">PRESS SPACE TO PLAY AGAIN</div>
+      <div id="restart-msg" class="blink">
+        <span class="desktop-only">PRESS SPACE TO PLAY AGAIN</span>
+        <span class="mobile-only">TAP HERE TO PLAY AGAIN</span>
+      </div>
+    </div>
+    <div id="touch-controls">
+      <div id="touch-left-zone">
+        <button id="btn-left" aria-label="Move Left">&#9664;</button>
+        <button id="btn-right" aria-label="Move Right">&#9654;</button>
+      </div>
+      <div id="touch-right-zone">
+        <button id="btn-fire" aria-label="Fire">FIRE</button>
+      </div>
     </div>
   </div>
   <script src="game.js"></script>
