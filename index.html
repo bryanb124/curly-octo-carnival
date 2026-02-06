@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Invaders - 8-Bit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <div id="header">
+      <div id="score-display">SCORE: <span id="score">0000</span></div>
+      <div id="hiscore-display">HI-SCORE: <span id="hiscore">0000</span></div>
+      <div id="lives-display">LIVES: <span id="lives"></span></div>
+    </div>
+    <canvas id="gameCanvas" width="480" height="560"></canvas>
+    <div id="overlay" class="visible">
+      <div id="title">SPACE INVADERS</div>
+      <div id="subtitle">8-BIT EDITION</div>
+      <div id="instructions">
+        <p>&larr; &rarr; ARROW KEYS TO MOVE</p>
+        <p>SPACE TO FIRE</p>
+        <p>P TO PAUSE</p>
+      </div>
+      <div id="start-msg" class="blink">PRESS SPACE TO START</div>
+    </div>
+    <div id="game-over-overlay" class="hidden">
+      <div id="game-over-text">GAME OVER</div>
+      <div id="final-score">SCORE: 0000</div>
+      <div id="restart-msg" class="blink">PRESS SPACE TO PLAY AGAIN</div>
+    </div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>

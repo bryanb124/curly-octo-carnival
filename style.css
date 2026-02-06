@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'Press Start 2P', monospace;
+  overflow: hidden;
+}
+
+#game-container {
+  position: relative;
+  width: 480px;
+}
+
+#header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4px;
+  color: #fff;
+  font-size: 10px;
+}
+
+#lives-display span {
+  color: #0f0;
+}
+
+#score-display, #hiscore-display {
+  color: #fff;
+}
+
+canvas {
+  display: block;
+  background: #000;
+  border: 2px solid #333;
+  image-rendering: pixelated;
+}
+
+#overlay, #game-over-overlay {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 480px;
+  height: 560px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 10;
+}
+
+#overlay.hidden, #game-over-overlay.hidden {
+  display: none;
+}
+
+#overlay.visible, #game-over-overlay.visible {
+  display: flex;
+}
+
+#title {
+  font-size: 28px;
+  color: #0f0;
+  margin-bottom: 12px;
+  text-shadow: 0 0 10px #0f0, 0 0 20px #0f0;
+}
+
+#subtitle {
+  font-size: 14px;
+  color: #0ff;
+  margin-bottom: 40px;
+  text-shadow: 0 0 8px #0ff;
+}
+
+#instructions p {
+  color: #aaa;
+  font-size: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+#start-msg, #restart-msg {
+  margin-top: 30px;
+  font-size: 12px;
+  color: #ff0;
+}
+
+#game-over-text {
+  font-size: 32px;
+  color: #f00;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px #f00, 0 0 20px #f00;
+}
+
+#final-score {
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.blink {
+  animation: blink-anim 1s step-end infinite;
+}
+
+@keyframes blink-anim {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
