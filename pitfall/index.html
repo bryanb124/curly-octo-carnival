@@ -23,34 +23,9 @@
       height: 100vh;
       touch-action: none;
     }
-    #rotate-msg {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: #000;
-      color: #ffff00;
-      font-family: 'Courier New', monospace;
-      font-size: 18px;
-      text-align: center;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      z-index: 999;
-    }
-    #rotate-msg .arrow { font-size: 48px; }
-    @media (orientation: portrait) {
-      #rotate-msg { display: flex; }
-      canvas { display: none; }
-    }
   </style>
 </head>
 <body>
-  <div id="rotate-msg">
-    <div class="arrow">&#10227;</div>
-    <div>ROTATE DEVICE</div>
-    <div>TO LANDSCAPE</div>
-  </div>
   <canvas id="gameCanvas"></canvas>
   <script src="game.js"></script>
 </body>

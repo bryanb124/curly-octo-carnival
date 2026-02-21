@@ -3,13 +3,17 @@
 // ─── CANVAS SETUP ────────────────────────────────────────────
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-let W, H, GROUND_Y, CEIL_Y;
+let W, H, GROUND_Y, CEIL_Y, GAME_H;
+
+function isPortrait() { return window.innerHeight > window.innerWidth; }
 
 function resize() {
   W = canvas.width  = window.innerWidth;
   H = canvas.height = window.innerHeight;
-  GROUND_Y = Math.floor(H * 0.73);
-  CEIL_Y   = Math.floor(H * 0.12);
+  // In portrait, reserve bottom 30% for touch controls so they don't cover the game
+  GAME_H   = isPortrait() ? Math.floor(H * 0.70) : H;
+  GROUND_Y = Math.floor(GAME_H * 0.73);
+  CEIL_Y   = Math.floor(GAME_H * 0.12);
 }
 window.addEventListener('resize', resize);
 resize();
@@ -388,13 +392,27 @@ window.addEventListener('keyup', e => {
 // Touch controls — build buttons after first render so we know W/H
 let btnLeft, btnRight, btnJump;
 function buildTouchButtons() {
-  const bh = Math.min(80, H * 0.22);
-  const bw = Math.min(90, W * 0.14);
-  const by = H - bh - Math.max(8, H*0.03);
-  const pad = Math.max(10, W*0.02);
-  btnLeft  = { x:pad,      y:by, w:bw, h:bh, label:'◀' };
-  btnRight = { x:pad+bw+10,y:by, w:bw, h:bh, label:'▶' };
-  btnJump  = { x:W-bw-pad, y:by, w:bw, h:bh, label:'▲' };
+  if (isPortrait()) {
+    // Controls sit in the reserved bottom 30% of screen
+    const ctrlTop = GAME_H + Math.floor((H - GAME_H) * 0.08);
+    const ctrlH   = H - ctrlTop - Math.floor((H - GAME_H) * 0.08);
+    const bh = Math.floor(ctrlH * 0.82);
+    const bw = Math.floor(W * 0.27);
+    const by = ctrlTop + Math.floor((ctrlH - bh) / 2);
+    const pad = Math.floor(W * 0.03);
+    btnLeft  = { x: pad,          y: by, w: bw, h: bh, label: '◀' };
+    btnRight = { x: pad+bw+8,     y: by, w: bw, h: bh, label: '▶' };
+    btnJump  = { x: W-bw-pad,     y: by, w: bw, h: bh, label: '▲' };
+  } else {
+    // Landscape: small overlay buttons in bottom corners
+    const bh = Math.min(80, H * 0.22);
+    const bw = Math.min(90, W * 0.14);
+    const by = H - bh - Math.max(8, H * 0.03);
+    const pad = Math.max(10, W * 0.02);
+    btnLeft  = { x: pad,       y: by, w: bw, h: bh, label: '◀' };
+    btnRight = { x: pad+bw+10, y: by, w: bw, h: bh, label: '▶' };
+    btnJump  = { x: W-bw-pad,  y: by, w: bw, h: bh, label: '▲' };
+  }
 }
 
 function ptInBtn(px, py, btn) {
@@ -1043,7 +1061,14 @@ function drawHUD() {
 
 function drawTouchButtons() {
   if (!btnLeft) return;
-  const alpha = 0.55;
+  // In portrait, draw a solid control panel below the game area
+  if (isPortrait()) {
+    ctx.fillStyle = '#111118';
+    ctx.fillRect(0, GAME_H, W, H - GAME_H);
+    ctx.fillStyle = '#333355';
+    ctx.fillRect(0, GAME_H, W, 3);
+  }
+  const alpha = isPortrait() ? 0.85 : 0.55;
   [btnLeft, btnRight, btnJump].forEach(btn => {
     ctx.fillStyle = `rgba(255,255,255,${alpha})`;
     ctx.strokeStyle = 'rgba(255,255,255,0.9)';
