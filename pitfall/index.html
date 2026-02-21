@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-fullscreen">
+  <meta name="apple-mobile-web-app-title" content="Pitfall!">
+  <title>Pitfall! 8-Bit</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%;
+      background: #000;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+    canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      touch-action: none;
+    }
+    #rotate-msg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #000;
+      color: #ffff00;
+      font-family: 'Courier New', monospace;
+      font-size: 18px;
+      text-align: center;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      z-index: 999;
+    }
+    #rotate-msg .arrow { font-size: 48px; }
+    @media (orientation: portrait) {
+      #rotate-msg { display: flex; }
+      canvas { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="rotate-msg">
+    <div class="arrow">&#10227;</div>
+    <div>ROTATE DEVICE</div>
+    <div>TO LANDSCAPE</div>
+  </div>
+  <canvas id="gameCanvas"></canvas>
+  <script src="game.js"></script>
+</body>
+</html>
