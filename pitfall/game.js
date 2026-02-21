@@ -99,7 +99,7 @@ function px(x, y, w, h, col) {
 }
 
 function drawPlayer(x, y, dir, frame, state) {
-  const s = Math.max(1, Math.floor(H / 22)); // scale unit
+  const s = Math.max(1, Math.floor(GAME_H / 22)); // scale unit
   const mx = x - s*2; // mirror offset
   ctx.save();
   if (dir < 0) { ctx.scale(-1,1); ctx.translate(-x*2, 0); }
@@ -452,8 +452,8 @@ function loadRoom(ri, ug) {
   const rs = ug ? ugRoomStates[ri % UG_COUNT] : roomStates[ri % ROOM_COUNT];
 
   const groundY = ug ? GROUND_Y : GROUND_Y;
-  const logR = Math.floor(H * 0.045);
-  const pitH = H - groundY;
+  const logR = Math.floor(GAME_H * 0.045);
+  const pitH = GAME_H - groundY;
 
   // Build pits
   pits = (template.pits || []).map(p => ({
@@ -483,7 +483,7 @@ function loadRoom(ri, ug) {
       vx:    h.type==='bat' ? speed : -speed,
       frame: 0,
       frameTimer: 0,
-      size:  h.type==='log' ? logR : Math.floor(H*0.025),
+      size:  h.type==='log' ? logR : Math.floor(GAME_H*0.025),
       radius: logR,
       mouthOpen: false,
       mouthTimer: 0,
@@ -503,20 +503,20 @@ function loadRoom(ri, ug) {
   // Ladder
   if (template.ladder && !ug) {
     const lx = Math.floor(template.ladder.nx * W);
-    ladderObj = { x:lx, topY:groundY-H*0.18, botY:groundY, w:20 };
+    ladderObj = { x:lx, topY:groundY-GAME_H*0.18, botY:groundY, w:20 };
   } else { ladderObj = null; }
 
   // Exit ladder (underground)
   if (template.exitLadder && ug) {
     const lx = Math.floor(template.exitLadder.nx * W);
-    exitLadderObj = { x:lx, topY:groundY-H*0.18, botY:groundY, w:20 };
+    exitLadderObj = { x:lx, topY:groundY-GAME_H*0.18, botY:groundY, w:20 };
   } else { exitLadderObj = null; }
 
   // Treasure
   const tstate = ug ? ugRoomStates[ri % UG_COUNT].treasure : roomStates[ri % ROOM_COUNT].treasure;
   if (template.treasure && !tstate) {
     const tx = Math.floor(template.treasure.nx * W);
-    treasureObj = { x:tx, y:groundY - Math.floor(H*0.05), type:template.treasure.type, pts:template.treasure.pts, collected:false };
+    treasureObj = { x:tx, y:groundY - Math.floor(GAME_H*0.05), type:template.treasure.type, pts:template.treasure.pts, collected:false };
   } else { treasureObj = null; }
 
   // Croc mouth timer
@@ -550,8 +550,8 @@ function startGame() {
 }
 
 function spawnPlayer(atStart) {
-  P.w = Math.floor(H * 0.055);
-  P.h = Math.floor(H * 0.12);
+  P.w = Math.floor(GAME_H * 0.055);
+  P.h = Math.floor(GAME_H * 0.12);
   P.x = atStart ? Math.floor(W * 0.12) : Math.floor(W * 0.12);
   P.y = GROUND_Y - P.h;
   P.vx = 0; P.vy = 0;
@@ -817,7 +817,7 @@ function checkCollisions() {
         const spacing = pit.w / pit.crocs;
         for (let i=0;i<pit.crocs;i++) {
           const cx = pit.x + spacing*(i+0.5);
-          const cs = Math.floor(H*0.03);
+          const cs = Math.floor(GAME_H*0.03);
           if (rectOverlap(cx-cs*5,pit.y-cs*3,cs*10,cs*4, px,py,pw,ph)) {
             triggerDeath(); return;
           }
@@ -960,16 +960,16 @@ function drawUndergroundBG() {
   px(0, GROUND_Y, W, H-GROUND_Y, COL.ugGround);
   px(0, GROUND_Y, W, Math.floor(H*0.02), COL.ugGrass);
   // Ceiling
-  px(0, 0, W, CEIL_Y+H*0.05, COL.ugGround);
-  px(0, CEIL_Y+H*0.05-4, W, 4, COL.ugGrass);
+  px(0, 0, W, CEIL_Y+GAME_H*0.05, COL.ugGround);
+  px(0, CEIL_Y+GAME_H*0.05-4, W, 4, COL.ugGrass);
   // Stalactites
   ctx.fillStyle = COL.ugGround;
   for (let i=0; i<W; i+=40) {
     const sh = 10 + (i%80===0?8:0);
     ctx.beginPath();
-    ctx.moveTo(i, CEIL_Y+H*0.05);
-    ctx.lineTo(i+15, CEIL_Y+H*0.05+sh);
-    ctx.lineTo(i+30, CEIL_Y+H*0.05);
+    ctx.moveTo(i, CEIL_Y+GAME_H*0.05);
+    ctx.lineTo(i+15, CEIL_Y+GAME_H*0.05+sh);
+    ctx.lineTo(i+30, CEIL_Y+GAME_H*0.05);
     ctx.fill();
   }
 }
@@ -1026,7 +1026,7 @@ function drawHazards() {
     } else if (h.type==='scorpion') {
       drawScorpion(h.x, h.y, s, h.frame);
     } else if (h.type==='bat') {
-      drawBat(h.x, Math.floor(GROUND_Y*0.5 + Math.sin(frameCount*0.04)*H*0.05), s, h.frame);
+      drawBat(h.x, Math.floor(GROUND_Y*0.5 + Math.sin(frameCount*0.04)*GAME_H*0.05), s, h.frame);
     }
   });
 }
@@ -1041,7 +1041,7 @@ function drawHUD() {
   const hudH = Math.floor(CEIL_Y * 0.95);
   px(0, 0, W, hudH, COL.hud);
   ctx.fillStyle = COL.hudText;
-  ctx.font = `bold ${Math.floor(H*0.033)}px 'Courier New', monospace`;
+  ctx.font = `bold ${Math.floor(GAME_H*0.033)}px 'Courier New', monospace`;
   ctx.textAlign = 'left';
   ctx.fillText(`SCORE ${score.toString().padStart(6,'0')}`, Math.floor(W*0.02), Math.floor(hudH*0.75));
   ctx.textAlign = 'center';
